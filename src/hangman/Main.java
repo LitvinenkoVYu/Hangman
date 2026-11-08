@@ -3,6 +3,9 @@ package hangman;
 import java.util.Scanner;
 
 public class Main {
+    public static void startGame(Scanner scanner){
+        System.out.println("Игра началась!");
+    }
     static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         while (true) {
@@ -12,7 +15,7 @@ public class Main {
             int choice = sc.nextInt();
             switch (choice) {
                 case 1:
-                    System.out.println("Запуск игры...");
+                    startGame(sc);
                     break;
                 case 2:
                     System.out.println("Выход из игры...");
@@ -23,4 +26,5 @@ public class Main {
             }
         }
     }
+
 }
