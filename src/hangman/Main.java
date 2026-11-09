@@ -37,9 +37,13 @@ public class Main {
         for (int i = 0; i < mask.length; i++) {
             mask[i] = '*';
         }
-        int errors=0;
-        ArrayList<Character>usedLetters=new ArrayList<>();
+        int errors = 0;
+        ArrayList<Character> usedLetters = new ArrayList<>();
         System.out.println("Загадано: " + Arrays.toString(mask));  // перевод с языка массивов на обычный язык
+    }
+
+    public static boolean isGameLost(int errors) {
+        return errors >= 6;
     }
 
     public static String getRandomWord(ArrayList<String> words) {
