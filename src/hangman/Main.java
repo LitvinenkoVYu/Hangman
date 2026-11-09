@@ -46,6 +46,15 @@ public class Main {
         return errors >= 6;
     }
 
+    public static boolean isGameWon(char[] mask) {
+        for (int i = 0; i < mask.length; i++) {
+            if (mask[i] == '*') {
+                return false;
+            }
+        }
+        return true;
+    }
+
     public static String getRandomWord(ArrayList<String> words) {
         if (words.size() > 0) {
             Random random = new Random();
