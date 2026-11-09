@@ -55,6 +55,19 @@ public class Main {
         return true;
     }
 
+    public static boolean processGuess(char letter, String secretWord, char[] mask) {
+        boolean isGuessed = false;
+        for (int i = 0; i < secretWord.length(); i++) {
+            if (secretWord.charAt(i) == letter) {
+                mask[i] = letter;
+                isGuessed = true; // return не делаю, тк продолжаем искать
+            }
+        }
+        return isGuessed;
+    }
+    // letter - введена игроком
+    // secretWord - загаданное компьютером
+
     public static String getRandomWord(ArrayList<String> words) {
         if (words.size() > 0) {
             Random random = new Random();
