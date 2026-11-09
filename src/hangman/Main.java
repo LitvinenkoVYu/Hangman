@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.file.FileSystemAlreadyExistsException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
@@ -30,9 +31,15 @@ public class Main {
     }
 
     public static void startGame(Scanner scanner) {
-        ArrayList<String>words=loadWordsFromFile();
-        String secretWord=getRandomWord(words);
-        System.out.println("Загадано: "+secretWord);
+        ArrayList<String> words = loadWordsFromFile(); // получил словарь
+        String secretWord = getRandomWord(words); // получил слово из словаря
+        char[] mask = new char[secretWord.length()];
+        for (int i = 0; i < mask.length; i++) {
+            mask[i] = '*';
+        }
+        int errors=0;
+        ArrayList<Character>usedLetters=new ArrayList<>();
+        System.out.println("Загадано: " + Arrays.toString(mask));  // перевод с языка массивов на обычный язык
     }
 
     public static String getRandomWord(ArrayList<String> words) {
