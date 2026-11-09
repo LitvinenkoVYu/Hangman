@@ -1,5 +1,8 @@
 package hangman;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.nio.file.FileSystemAlreadyExistsException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
@@ -27,17 +30,32 @@ public class Main {
     }
 
     public static void startGame(Scanner scanner) {
-        System.out.println("Игра началась!");
+        ArrayList<String>words=loadWordsFromFile();
+        String secretWord=getRandomWord(words);
+        System.out.println("Загадано: "+secretWord);
     }
 
     public static String getRandomWord(ArrayList<String> words) {
-        if(words.size()>0) {
-            Random random=new Random();
-            int index=random.nextInt(words.size());
+        if (words.size() > 0) {
+            Random random = new Random();
+            int index = random.nextInt(words.size());
             return words.get(index);
         } else {
             return null;
         }
     }
 
+    public static ArrayList<String> loadWordsFromFile() {
+        ArrayList<String> words = new ArrayList<>();
+        try {
+            File file = new File("words.txt");
+            Scanner sc = new Scanner(file);
+            while (sc.hasNextLine()) {
+                words.add(sc.nextLine());
+            }
+        } catch (FileNotFoundException e) {
+            System.out.println("Файл не найден");
+        }
+        return words;
+    }
 }
