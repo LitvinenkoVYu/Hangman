@@ -68,6 +68,10 @@ public class Main {
     // letter - введена игроком
     // secretWord - загаданное компьютером
 
+    public static boolean isValidLetter(char letter, ArrayList<Character> usedLetters) {
+        return Character.isLetter(letter) && !usedLetters.contains(letter);
+    }
+
     public static String getRandomWord(ArrayList<String> words) {
         if (words.size() > 0) {
             Random random = new Random();
