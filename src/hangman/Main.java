@@ -72,6 +72,21 @@ public class Main {
         return Character.isLetter(letter) && !usedLetters.contains(letter);
     }
 
+    public static int playRound(String secretWord, int errors, char[] mask, ArrayList<Character> usedLetters, Scanner sc) {
+        while (!isGameWon(mask)&&!isGameLost(errors)){ // вызов true, если игра закончена
+            char letter = sc.next().charAt(0);
+            if (!isValidLetter(letter,usedLetters)){
+                continue;
+            }
+            boolean isGuessed=processGuess(letter, secretWord,mask);
+            if(isGuessed==false){
+                errors++;
+            }
+            usedLetters.add(letter);
+        }
+        return errors;
+    }
+
     public static String getRandomWord(ArrayList<String> words) {
         if (words.size() > 0) {
             Random random = new Random();
