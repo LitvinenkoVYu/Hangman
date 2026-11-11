@@ -11,6 +11,7 @@ public class Main {
     static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         while (true) {
+            System.out.println();
             System.out.println("Нажми 1, чтобы Начать игру");
             System.out.println("Нажми 2, чтобы Выйти");
             System.out.print("Выбери действие: ");
@@ -47,6 +48,8 @@ public class Main {
             System.out.println("Ты проиграл!");
             printSecretWord(secretWord);
         }
+        printUsedLetters(usedLetters);
+
     }
 
     public static boolean isGameLost(int errors) {
@@ -82,6 +85,7 @@ public class Main {
     public static int playRound(String secretWord, int errors, char[] mask, ArrayList<
             Character> usedLetters, Scanner sc) {
         while (!isGameWon(mask) && !isGameLost(errors)) { // вызов true, если игра закончена
+            printUsedLetters(usedLetters);
             System.out.print("Введите букву: ");
             char letter = sc.next().charAt(0);
             if (!isValidLetter(letter, usedLetters)) {
@@ -123,5 +127,9 @@ public class Main {
 
     public static void printSecretWord(String secretWord){
         System.out.println("Загаданное слово было: "+secretWord);
+    }
+
+    public static void printUsedLetters(ArrayList<Character>usedLetters){
+        System.out.println("Использованные буквы: "+usedLetters);
     }
 }
