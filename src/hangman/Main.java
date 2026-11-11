@@ -2,7 +2,6 @@ package hangman;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.nio.file.FileSystemAlreadyExistsException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Random;
@@ -43,8 +42,10 @@ public class Main {
         errors = playRound(secretWord, errors, mask, usedLetters, sc);
         if (isGameWon(mask) == true) {
             System.out.println("Ты победил!");
+            printSecretWord(secretWord);
         } else {
             System.out.println("Ты проиграл!");
+            printSecretWord(secretWord);
         }
     }
 
@@ -118,5 +119,9 @@ public class Main {
             System.out.println("Файл не найден");
         }
         return words;
+    }
+
+    public static void printSecretWord(String secretWord){
+        System.out.println("Загаданное слово было: "+secretWord);
     }
 }
