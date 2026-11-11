@@ -30,7 +30,7 @@ public class Main {
         }
     }
 
-    public static void startGame(Scanner scanner) {
+    public static void startGame(Scanner sc) {
         ArrayList<String> words = loadWordsFromFile(); // получил словарь
         String secretWord = getRandomWord(words); // получил слово из словаря
         char[] mask = new char[secretWord.length()];
@@ -39,7 +39,13 @@ public class Main {
         }
         int errors = 0;
         ArrayList<Character> usedLetters = new ArrayList<>();
-        System.out.println("Загадано: " + Arrays.toString(mask));  // перевод с языка массивов на обычный язык
+        System.out.println("Текущее загаданное слово: ");  // перевод с языка массивов на обычный язык
+        errors = playRound(secretWord, errors, mask, usedLetters, sc);
+        if (isGameWon(mask) == true) {
+            System.out.println("Ты победил!");
+        } else {
+            System.out.println("Ты проиграл!");
+        }
     }
 
     public static boolean isGameLost(int errors) {
@@ -72,17 +78,20 @@ public class Main {
         return Character.isLetter(letter) && !usedLetters.contains(letter);
     }
 
-    public static int playRound(String secretWord, int errors, char[] mask, ArrayList<Character> usedLetters, Scanner sc) {
-        while (!isGameWon(mask)&&!isGameLost(errors)){ // вызов true, если игра закончена
+    public static int playRound(String secretWord, int errors, char[] mask, ArrayList<
+            Character> usedLetters, Scanner sc) {
+        while (!isGameWon(mask) && !isGameLost(errors)) { // вызов true, если игра закончена
+            System.out.print("Введите букву: ");
             char letter = sc.next().charAt(0);
-            if (!isValidLetter(letter,usedLetters)){
+            if (!isValidLetter(letter, usedLetters)) {
                 continue;
             }
-            boolean isGuessed=processGuess(letter, secretWord,mask);
-            if(isGuessed==false){
+            boolean isGuessed = processGuess(letter, secretWord, mask);
+            if (isGuessed == false) {
                 errors++;
             }
             usedLetters.add(letter);
+            System.out.println("Слово: " + Arrays.toString(mask));
         }
         return errors;
     }
