@@ -2,10 +2,7 @@ package hangman;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 public class Main {
     static void main(String[] args) {
@@ -87,7 +84,10 @@ public class Main {
             printUsedLetters(usedLetters);
             System.out.println("Количество ошибок: " + errors + "/6");
             System.out.print("Введите букву: ");
-            char letter = sc.next().charAt(0);
+            // char letter = sc.next().charAt(0);
+            String input=sc.next();
+            input=input.toLowerCase();
+            char letter=input.charAt(0);
             if (!isValidLetter(letter, usedLetters)) {
                 continue;
             }
@@ -117,7 +117,10 @@ public class Main {
             File file = new File("words.txt");
             Scanner sc = new Scanner(file);
             while (sc.hasNextLine()) {
-                words.add(sc.nextLine());
+                String temp = sc.nextLine();
+                temp = temp.toLowerCase();
+                words.add(temp);
+                //words.add(sc.nextLine()); это если мы работаем без понижения регистра
             }
         } catch (FileNotFoundException e) {
             System.out.println("Файл не найден");
