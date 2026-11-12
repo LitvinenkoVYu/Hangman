@@ -48,8 +48,6 @@ public class Main {
             System.out.println("Ты проиграл!");
             printSecretWord(secretWord);
         }
-        printUsedLetters(usedLetters);
-
     }
 
     public static boolean isGameLost(int errors) {
@@ -85,7 +83,9 @@ public class Main {
     public static int playRound(String secretWord, int errors, char[] mask, ArrayList<
             Character> usedLetters, Scanner sc) {
         while (!isGameWon(mask) && !isGameLost(errors)) { // вызов true, если игра закончена
+            System.out.println("Слово: " + Arrays.toString(mask));
             printUsedLetters(usedLetters);
+            System.out.println("Количество ошибок: " + errors + "/6");
             System.out.print("Введите букву: ");
             char letter = sc.next().charAt(0);
             if (!isValidLetter(letter, usedLetters)) {
@@ -96,7 +96,7 @@ public class Main {
                 errors++;
             }
             usedLetters.add(letter);
-            System.out.println("Слово: " + Arrays.toString(mask));
+            System.out.println();
         }
         return errors;
     }
@@ -125,11 +125,11 @@ public class Main {
         return words;
     }
 
-    public static void printSecretWord(String secretWord){
-        System.out.println("Загаданное слово было: "+secretWord);
+    public static void printSecretWord(String secretWord) {
+        System.out.println("Загаданное слово было: " + secretWord);
     }
 
-    public static void printUsedLetters(ArrayList<Character>usedLetters){
-        System.out.println("Использованные буквы: "+usedLetters);
+    public static void printUsedLetters(ArrayList<Character> usedLetters) {
+        System.out.println("Использованные буквы: " + usedLetters);
     }
 }
