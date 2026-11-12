@@ -39,9 +39,11 @@ public class Main {
         System.out.println("Текущее загаданное слово: ");  // перевод с языка массивов на обычный язык
         errors = playRound(secretWord, errors, mask, usedLetters, sc);
         if (isGameWon(mask) == true) {
+            printHangman(errors);
             System.out.println("Ты победил!");
             printSecretWord(secretWord);
         } else {
+            printHangman(errors);
             System.out.println("Ты проиграл!");
             printSecretWord(secretWord);
         }
@@ -80,20 +82,22 @@ public class Main {
     public static int playRound(String secretWord, int errors, char[] mask, ArrayList<
             Character> usedLetters, Scanner sc) {
         while (!isGameWon(mask) && !isGameLost(errors)) { // вызов true, если игра закончена
-            System.out.println("Слово: " + Arrays.toString(mask));
-            printUsedLetters(usedLetters);
             System.out.println("Количество ошибок: " + errors + "/6");
+            printHangman(errors);
+            printUsedLetters(usedLetters);
+            System.out.println("Слово: " + Arrays.toString(mask));
             System.out.print("Введите букву: ");
             // char letter = sc.next().charAt(0);
-            String input=sc.next();
-            input=input.toLowerCase();
-            char letter=input.charAt(0);
+            String input = sc.next();
+            input = input.toLowerCase();
+            char letter = input.charAt(0);
             if (!isValidLetter(letter, usedLetters)) {
                 continue;
             }
             boolean isGuessed = processGuess(letter, secretWord, mask);
             if (isGuessed == false) {
                 errors++;
+                System.out.println("Упс, такой буквы нет!");
             }
             usedLetters.add(letter);
             System.out.println();
@@ -134,5 +138,67 @@ public class Main {
 
     public static void printUsedLetters(ArrayList<Character> usedLetters) {
         System.out.println("Использованные буквы: " + usedLetters);
+    }
+
+    public static void printHangman(int errors) {
+        switch (errors) {
+            case 0:
+                System.out.println();
+                break;
+            case 1:
+                System.out.println("  +---+\n" +
+                        "  |   |\n" +
+                        "      |\n" +
+                        "      |\n" +
+                        "      |\n" +
+                        "      |\n" +
+                        "=========");
+                break;
+            case 2:
+                System.out.println("  +---+\n" +
+                        "  |   |\n" +
+                        "  O   |\n" +
+                        "      |\n" +
+                        "      |\n" +
+                        "      |\n" +
+                        "=========");
+                break;
+            case 3:
+                System.out.println("  +---+\n" +
+                        "  |   |\n" +
+                        "  O   |\n" +
+                        "  |   |\n" +
+                        "      |\n" +
+                        "      |\n" +
+                        "=========");
+                break;
+            case 4:
+                System.out.println("  +---+\n" +
+                        "  |   |\n" +
+                        "  O   |\n" +
+                        " /|   |\n" +
+                        "      |\n" +
+                        "      |\n" +
+                        "=========");
+                break;
+            case 5:
+                System.out.println("  +---+\n" +
+                        "  |   |\n" +
+                        "  O   |\n" +
+                        " /|\\  |\n" +
+                        "      |\n" +
+                        "      |\n" +
+                        "=========");
+                break;
+            case 6:
+                System.out.println("  +---+\n" +
+                        "  |   |\n" +
+                        "  O   |\n" +
+                        " /|\\  |\n" +
+                        " / \\  |\n" +
+                        "      |\n" +
+                        "=========");
+                break;
+        }
     }
 }
