@@ -5,6 +5,9 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public class Main {
+    public static final int MAX_ERRORS=6;
+    public static final int START_GAME=1;
+    public static final int EXIT_GAME=2;
     static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         while (true) {
@@ -14,10 +17,10 @@ public class Main {
             System.out.print("Выбери действие: ");
             int choice = sc.nextInt();
             switch (choice) {
-                case 1:
+                case START_GAME:
                     startGame(sc);
                     break;
-                case 2:
+                case EXIT_GAME:
                     System.out.println("Выход из игры...");
                     return;
                 default:
@@ -50,7 +53,7 @@ public class Main {
     }
 
     public static boolean isGameLost(int errors) {
-        return errors >= 6;
+        return errors >= MAX_ERRORS;
     }
 
     public static boolean isGameWon(char[] mask) {
