@@ -4,10 +4,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.*;
 
-public class Main {
-    public static final int MAX_ERRORS=6;
-    public static final int START_GAME=1;
-    public static final int EXIT_GAME=2;
+public final class Main {
+    public static final int MAX_ERRORS = 6;
+    public static final int START_GAME = 1;
+    public static final int EXIT_GAME = 2;
+
     static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         while (true) {
@@ -42,11 +43,11 @@ public class Main {
         System.out.println("Текущее загаданное слово: ");  // перевод с языка массивов на обычный язык
         errors = playRound(secretWord, errors, mask, usedLetters, sc);
         if (isGameWon(mask) == true) {
-            printHangman(errors);
+            HangmanPicture.printHangman(errors);
             System.out.println("Ты победил!");
             printSecretWord(secretWord);
         } else {
-            printHangman(errors);
+            HangmanPicture.printHangman(errors);
             System.out.println("Ты проиграл!");
             printSecretWord(secretWord);
         }
@@ -86,7 +87,7 @@ public class Main {
             Character> usedLetters, Scanner sc) {
         while (!isGameWon(mask) && !isGameLost(errors)) { // вызов true, если игра закончена
             System.out.println("Количество ошибок: " + errors + "/6");
-            printHangman(errors);
+            HangmanPicture.printHangman(errors);
             printUsedLetters(usedLetters);
             System.out.println("Слово: " + Arrays.toString(mask));
             System.out.print("Введите букву: ");
@@ -142,66 +143,65 @@ public class Main {
     public static void printUsedLetters(ArrayList<Character> usedLetters) {
         System.out.println("Использованные буквы: " + usedLetters);
     }
+}
 
-    public static void printHangman(int errors) {
-        switch (errors) {
-            case 0:
-                System.out.println();
-                break;
-            case 1:
-                System.out.println("  +---+\n" +
-                        "  |   |\n" +
-                        "      |\n" +
-                        "      |\n" +
-                        "      |\n" +
-                        "      |\n" +
-                        "=========");
-                break;
-            case 2:
-                System.out.println("  +---+\n" +
-                        "  |   |\n" +
-                        "  O   |\n" +
-                        "      |\n" +
-                        "      |\n" +
-                        "      |\n" +
-                        "=========");
-                break;
-            case 3:
-                System.out.println("  +---+\n" +
-                        "  |   |\n" +
-                        "  O   |\n" +
-                        "  |   |\n" +
-                        "      |\n" +
-                        "      |\n" +
-                        "=========");
-                break;
-            case 4:
-                System.out.println("  +---+\n" +
-                        "  |   |\n" +
-                        "  O   |\n" +
-                        " /|   |\n" +
-                        "      |\n" +
-                        "      |\n" +
-                        "=========");
-                break;
-            case 5:
-                System.out.println("  +---+\n" +
-                        "  |   |\n" +
-                        "  O   |\n" +
-                        " /|\\  |\n" +
-                        "      |\n" +
-                        "      |\n" +
-                        "=========");
-                break;
-            case 6:
-                System.out.println("  +---+\n" +
-                        "  |   |\n" +
-                        "  O   |\n" +
-                        " /|\\  |\n" +
-                        " / \\  |\n" +
-                        "      |\n" +
-                        "=========");
-                break;
-        }
-    }
+class HangmanPicture {
+    private HangmanPicture() {};
+        public static final String[] PICTURES ={"",
+                """
+          +---+
+          |   |
+              |
+              |
+              |
+              |
+        =========
+        """,
+                """
+          +---+
+          |   |
+          O   |
+              |
+              |
+              |
+        =========
+        """,
+                """
+          +---+
+          |   |
+          O   |
+          |   |
+              |
+              |
+        =========
+        """,
+                """
+          +---+
+          |   |
+          O   |
+         /|   |
+              |
+              |
+        =========
+        """,
+                """
+          +---+
+          |   |
+          O   |
+         /|\\  |
+              |
+              |
+        =========
+        """,
+                """
+          +---+
+          |   |
+          O   |
+         /|\\  |
+         / \\  |
+              |
+        =========
+        """};
+    public static void printHangman(int errors){
+        System.out.println(PICTURES[errors]);}
 }
