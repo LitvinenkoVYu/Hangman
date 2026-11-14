@@ -9,7 +9,7 @@ public final class Main {
     public static final int START_GAME = 1;
     public static final int EXIT_GAME = 2;
 
-    static void main(String[] args) {
+    public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.println();
@@ -146,9 +146,11 @@ public final class Main {
 }
 
 class HangmanPicture {
-    private HangmanPicture() {};
-        public static final String[] PICTURES ={"",
-                """
+    public HangmanPicture() {
+    } // предотвращение создание объекта извне
+
+    public static final String[] PICTURES = {"",
+            """
           +---+
           |   |
               |
@@ -157,25 +159,25 @@ class HangmanPicture {
               |
         =========
         """,
-                """
-          +---+
-          |   |
-          O   |
-              |
-              |
-              |
-        =========
-        """,
-                """
+            """
           +---+
           |   |
           O   |
+              |
+              |
+              |
+        =========
+        """,
+            """
+          +---+
+          |   |
+          O   |
           |   |
               |
               |
         =========
         """,
-                """
+            """
           +---+
           |   |
           O   |
@@ -184,7 +186,7 @@ class HangmanPicture {
               |
         =========
         """,
-                """
+            """
           +---+
           |   |
           O   |
@@ -193,7 +195,7 @@ class HangmanPicture {
               |
         =========
         """,
-                """
+            """
           +---+
           |   |
           O   |
@@ -202,6 +204,10 @@ class HangmanPicture {
               |
         =========
         """};
-    public static void printHangman(int errors){
-        System.out.println(PICTURES[errors]);}
+
+    public static void printHangman(int errors) {
+        if (errors >= 0 && errors <= PICTURES.length - 1) {
+            System.out.println(PICTURES[errors]);
+        }
+    }
 }
