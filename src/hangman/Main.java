@@ -16,6 +16,10 @@ public final class Main {
             System.out.println("Нажми 1, чтобы Начать игру");
             System.out.println("Нажми 2, чтобы Выйти");
             System.out.print("Выбери действие: ");
+            if (!sc.hasNextInt()) {
+                sc.nextLine();
+                continue;
+            }
             int choice = sc.nextInt();
             switch (choice) {
                 case START_GAME:
@@ -34,6 +38,9 @@ public final class Main {
     public static void startGame(Scanner sc) {
         ArrayList<String> words = loadWordsFromFile(); // получил словарь
         String secretWord = getRandomWord(words); // получил слово из словаря
+        if (secretWord == null) {
+            return;
+        }
         char[] mask = new char[secretWord.length()];
         for (int i = 0; i < mask.length; i++) {
             mask[i] = '*';
