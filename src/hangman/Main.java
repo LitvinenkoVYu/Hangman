@@ -101,6 +101,10 @@ public final class Main {
             // char letter = sc.next().charAt(0);
             String input = sc.next();
             input = input.toLowerCase();
+            if (input.length()>1){
+                System.out.println("Неверный ввод, вводи по одной букве!");
+                continue;
+            }
             char letter = input.charAt(0);
             if (!isValidLetter(letter, usedLetters)) {
                 continue;
@@ -136,6 +140,9 @@ public final class Main {
                 temp = temp.toLowerCase();
                 words.add(temp);
                 //words.add(sc.nextLine()); это если мы работаем без понижения регистра
+            }
+            if (words.isEmpty()){
+                System.out.println("Словарь пуст");
             }
         } catch (FileNotFoundException e) {
             System.out.println("Файл не найден");
