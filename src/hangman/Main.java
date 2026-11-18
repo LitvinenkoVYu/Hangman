@@ -87,7 +87,7 @@ public final class Main {
     // secretWord - загаданное компьютером
 
     public static boolean isValidLetter(char letter, ArrayList<Character> usedLetters) {
-        return Character.isLetter(letter) && !usedLetters.contains(letter);
+        return ((letter >= 'а' && letter <= 'я') || letter == 'ё') && !usedLetters.contains(letter);
     }
 
     public static int playRound(String secretWord, int errors, char[] mask, ArrayList<
@@ -96,12 +96,12 @@ public final class Main {
             System.out.println("Количество ошибок: " + errors + "/6");
             HangmanPicture.printHangman(errors);
             printUsedLetters(usedLetters);
-            System.out.println("Слово: " + Arrays.toString(mask));
+            System.out.println("Слово: " + new String(mask));
             System.out.print("Введите букву: ");
             // char letter = sc.next().charAt(0);
             String input = sc.next();
             input = input.toLowerCase();
-            if (input.length()>1){
+            if (input.length() > 1) {
                 System.out.println("Неверный ввод, вводи по одной букве!");
                 continue;
             }
@@ -141,7 +141,7 @@ public final class Main {
                 words.add(temp);
                 //words.add(sc.nextLine()); это если мы работаем без понижения регистра
             }
-            if (words.isEmpty()){
+            if (words.isEmpty()) {
                 System.out.println("Словарь пуст");
             }
         } catch (FileNotFoundException e) {
