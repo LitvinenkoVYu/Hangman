@@ -5,16 +5,19 @@ import java.io.FileNotFoundException;
 import java.util.*;
 
 public final class Main {
-    public static final int MAX_ERRORS = 6;
-    public static final int START_GAME = 1;
-    public static final int EXIT_GAME = 2;
+    private static final int MAX_ERRORS = 6;
+    private static final int START_GAME = 1;
+    private static final int EXIT_GAME = 2;
+    private static final String WORDS_FILE="words.txt";
+    private static final char HIDDEN_LETTER='*';
+
 
     public static void main(String[] args) {
         Scanner sc = new Scanner(System.in);
         while (true) {
             System.out.println();
-            System.out.println("Нажми 1, чтобы Начать игру");
-            System.out.println("Нажми 2, чтобы Выйти");
+            System.out.printf("Нажми %d, чтобы Начать игру\n", START_GAME);
+            System.out.printf("Нажми %d, чтобы Выйти\n",EXIT_GAME);
             System.out.print("Выбери действие: ");
             if (!sc.hasNextInt()) {
                 sc.nextLine();
@@ -35,7 +38,7 @@ public final class Main {
         }
     }
 
-    public static void startGame(Scanner sc) {
+    private static void startGame(Scanner sc) {
         ArrayList<String> words = loadWordsFromFile(); // получил словарь
         String secretWord = getRandomWord(words); // получил слово из словаря
         if (secretWord == null) {
@@ -43,37 +46,37 @@ public final class Main {
         }
         char[] mask = new char[secretWord.length()];
         for (int i = 0; i < mask.length; i++) {
-            mask[i] = '*';
+            mask[i] = HIDDEN_LETTER;
         }
         int errors = 0;
         ArrayList<Character> usedLetters = new ArrayList<>();
         System.out.println("Текущее загаданное слово: ");  // перевод с языка массивов на обычный язык
         errors = playRound(secretWord, errors, mask, usedLetters, sc);
         if (isGameWon(mask) == true) {
-            HangmanPicture.printHangman(errors);
+            HangmanPicture.print(errors);
             System.out.println("Ты победил!");
             printSecretWord(secretWord);
         } else {
-            HangmanPicture.printHangman(errors);
+            HangmanPicture.print(errors);
             System.out.println("Ты проиграл!");
             printSecretWord(secretWord);
         }
     }
 
-    public static boolean isGameLost(int errors) {
+    private static boolean isGameLost(int errors) {
         return errors >= MAX_ERRORS;
     }
 
-    public static boolean isGameWon(char[] mask) {
+    private static boolean isGameWon(char[] mask) {
         for (int i = 0; i < mask.length; i++) {
-            if (mask[i] == '*') {
+            if (mask[i] == HIDDEN_LETTER) {
                 return false;
             }
         }
         return true;
     }
 
-    public static boolean processGuess(char letter, String secretWord, char[] mask) {
+    private static boolean processGuess(char letter, String secretWord, char[] mask) {
         boolean isGuessed = false;
         for (int i = 0; i < secretWord.length(); i++) {
             if (secretWord.charAt(i) == letter) {
@@ -86,15 +89,15 @@ public final class Main {
     // letter - введена игроком
     // secretWord - загаданное компьютером
 
-    public static boolean isValidLetter(char letter, ArrayList<Character> usedLetters) {
+    private static boolean isValidLetter(char letter, ArrayList<Character> usedLetters) {
         return ((letter >= 'а' && letter <= 'я') || letter == 'ё') && !usedLetters.contains(letter);
     }
 
-    public static int playRound(String secretWord, int errors, char[] mask, ArrayList<
+    private static int playRound(String secretWord, int errors, char[] mask, ArrayList<
             Character> usedLetters, Scanner sc) {
         while (!isGameWon(mask) && !isGameLost(errors)) { // вызов true, если игра закончена
-            System.out.println("Количество ошибок: " + errors + "/6");
-            HangmanPicture.printHangman(errors);
+            System.out.printf("Количество ошибок: %d/%d%n", errors, MAX_ERRORS);
+            HangmanPicture.print(errors);
             printUsedLetters(usedLetters);
             System.out.println("Слово: " + new String(mask));
             System.out.print("Введите букву: ");
@@ -120,7 +123,7 @@ public final class Main {
         return errors;
     }
 
-    public static String getRandomWord(ArrayList<String> words) {
+    private static String getRandomWord(ArrayList<String> words) {
         if (words.size() > 0) {
             Random random = new Random();
             int index = random.nextInt(words.size());
@@ -130,10 +133,10 @@ public final class Main {
         }
     }
 
-    public static ArrayList<String> loadWordsFromFile() {
+    private static ArrayList<String> loadWordsFromFile() {
         ArrayList<String> words = new ArrayList<>();
         try {
-            File file = new File("words.txt");
+            File file = new File(WORDS_FILE);
             Scanner sc = new Scanner(file);
             while (sc.hasNextLine()) {
                 String temp = sc.nextLine();
@@ -150,78 +153,12 @@ public final class Main {
         return words;
     }
 
-    public static void printSecretWord(String secretWord) {
+    private static void printSecretWord(String secretWord) {
         System.out.println("Загаданное слово было: " + secretWord);
     }
 
-    public static void printUsedLetters(ArrayList<Character> usedLetters) {
+    private static void printUsedLetters(ArrayList<Character> usedLetters) {
         System.out.println("Использованные буквы: " + usedLetters);
     }
 }
 
-class HangmanPicture {
-    public HangmanPicture() {
-    } // предотвращение создание объекта извне
-
-    public static final String[] PICTURES = {"",
-            """
-          +---+
-          |   |
-              |
-              |
-              |
-              |
-        =========
-        """,
-            """
-          +---+
-          |   |
-          O   |
-              |
-              |
-              |
-        =========
-        """,
-            """
-          +---+
-          |   |
-          O   |
-          |   |
-              |
-              |
-        =========
-        """,
-            """
-          +---+
-          |   |
-          O   |
-         /|   |
-              |
-              |
-        =========
-        """,
-            """
-          +---+
-          |   |
-          O   |
-         /|\\  |
-              |
-              |
-        =========
-        """,
-            """
-          +---+
-          |   |
-          O   |
-         /|\\  |
-         / \\  |
-              |
-        =========
-        """};
-
-    public static void printHangman(int errors) {
-        if (errors >= 0 && errors <= PICTURES.length - 1) {
-            System.out.println(PICTURES[errors]);
-        }
-    }
-}
