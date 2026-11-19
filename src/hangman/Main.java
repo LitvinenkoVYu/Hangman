@@ -8,8 +8,8 @@ public final class Main {
     private static final int MAX_ERRORS = 6;
     private static final int START_GAME = 1;
     private static final int EXIT_GAME = 2;
-    private static final String WORDS_FILE="words.txt";
-    private static final char HIDDEN_LETTER='*';
+    private static final String WORDS_FILE = "words.txt";
+    private static final char HIDDEN_LETTER = '*';
 
 
     public static void main(String[] args) {
@@ -17,7 +17,7 @@ public final class Main {
         while (true) {
             System.out.println();
             System.out.printf("Нажми %d, чтобы Начать игру\n", START_GAME);
-            System.out.printf("Нажми %d, чтобы Выйти\n",EXIT_GAME);
+            System.out.printf("Нажми %d, чтобы Выйти\n", EXIT_GAME);
             System.out.print("Выбери действие: ");
             if (!sc.hasNextInt()) {
                 sc.nextLine();
@@ -39,8 +39,9 @@ public final class Main {
     }
 
     private static void startGame(Scanner sc) {
-        ArrayList<String> words = loadWordsFromFile(); // получил словарь
-        String secretWord = getRandomWord(words); // получил слово из словаря
+        List<String> words = loadWordsFromFile();
+        
+        String secretWord = getRandomWord(words);
         if (secretWord == null) {
             return;
         }
@@ -49,10 +50,10 @@ public final class Main {
             mask[i] = HIDDEN_LETTER;
         }
         int errors = 0;
-        ArrayList<Character> usedLetters = new ArrayList<>();
-        System.out.println("Текущее загаданное слово: ");  // перевод с языка массивов на обычный язык
+        List<Character> usedLetters = new ArrayList<>();
+        System.out.println("Текущее загаданное слово: ");
         errors = playRound(secretWord, errors, mask, usedLetters, sc);
-        if (isGameWon(mask) == true) {
+        if (isGameWon(mask)) {
             HangmanPicture.print(errors);
             System.out.println("Ты победил!");
             printSecretWord(secretWord);
@@ -86,22 +87,19 @@ public final class Main {
         }
         return isGuessed;
     }
-    // letter - введена игроком
-    // secretWord - загаданное компьютером
 
-    private static boolean isValidLetter(char letter, ArrayList<Character> usedLetters) {
+    private static boolean isValidLetter(char letter, List<Character> usedLetters) {
         return ((letter >= 'а' && letter <= 'я') || letter == 'ё') && !usedLetters.contains(letter);
     }
 
-    private static int playRound(String secretWord, int errors, char[] mask, ArrayList<
+    private static int playRound(String secretWord, int errors, char[] mask, List<
             Character> usedLetters, Scanner sc) {
-        while (!isGameWon(mask) && !isGameLost(errors)) { // вызов true, если игра закончена
+        while (!isGameWon(mask) && !isGameLost(errors)) {
             System.out.printf("Количество ошибок: %d/%d%n", errors, MAX_ERRORS);
             HangmanPicture.print(errors);
             printUsedLetters(usedLetters);
             System.out.println("Слово: " + new String(mask));
             System.out.print("Введите букву: ");
-            // char letter = sc.next().charAt(0);
             String input = sc.next();
             input = input.toLowerCase();
             if (input.length() > 1) {
@@ -123,18 +121,17 @@ public final class Main {
         return errors;
     }
 
-    private static String getRandomWord(ArrayList<String> words) {
+    private static String getRandomWord(List<String> words) {
         if (words.size() > 0) {
             Random random = new Random();
             int index = random.nextInt(words.size());
             return words.get(index);
-        } else {
-            return null;
         }
+        return null;
     }
 
-    private static ArrayList<String> loadWordsFromFile() {
-        ArrayList<String> words = new ArrayList<>();
+    private static List<String> loadWordsFromFile() {
+        List<String> words = new ArrayList<>();
         try {
             File file = new File(WORDS_FILE);
             Scanner sc = new Scanner(file);
@@ -142,7 +139,6 @@ public final class Main {
                 String temp = sc.nextLine();
                 temp = temp.toLowerCase();
                 words.add(temp);
-                //words.add(sc.nextLine()); это если мы работаем без понижения регистра
             }
             if (words.isEmpty()) {
                 System.out.println("Словарь пуст");
@@ -157,7 +153,7 @@ public final class Main {
         System.out.println("Загаданное слово было: " + secretWord);
     }
 
-    private static void printUsedLetters(ArrayList<Character> usedLetters) {
+    private static void printUsedLetters(List<Character> usedLetters) {
         System.out.println("Использованные буквы: " + usedLetters);
     }
 }

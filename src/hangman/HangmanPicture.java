@@ -2,8 +2,7 @@ package hangman;
 
 public class HangmanPicture {
     public HangmanPicture() {
-    }
-
+    };
     public static final String[] PICTURES = {
             "",
             """
@@ -69,7 +68,7 @@ public class HangmanPicture {
     };
 
     public static void print(int errors) {
-        if (errors >= 0 && errors <= PICTURES.length - 1) {
+        if (errors >= 0 && errors < PICTURES.length) {
             System.out.println(PICTURES[errors]);
         }
     }
