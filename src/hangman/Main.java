@@ -39,12 +39,12 @@ public final class Main {
     }
 
     private static void startGame(Scanner sc) {
-        List<String> words = loadWordsFromFile();
-        
-        String secretWord = getRandomWord(words);
-        if (secretWord == null) {
+        List<String> words = FileLoader.loadWordsFromFile(WORDS_FILE);
+        if (words.isEmpty()) {
+            System.out.println("Не удалось загрузить словарь: файл отсутствует или пуст");
             return;
         }
+        String secretWord = getRandomWord(words);
         char[] mask = new char[secretWord.length()];
         for (int i = 0; i < mask.length; i++) {
             mask[i] = HIDDEN_LETTER;
@@ -82,36 +82,30 @@ public final class Main {
         for (int i = 0; i < secretWord.length(); i++) {
             if (secretWord.charAt(i) == letter) {
                 mask[i] = letter;
-                isGuessed = true; // return не делаю, тк продолжаем искать
+                isGuessed = true;
             }
         }
         return isGuessed;
     }
 
     private static boolean isValidLetter(char letter, List<Character> usedLetters) {
-        return ((letter >= 'а' && letter <= 'я') || letter == 'ё') && !usedLetters.contains(letter);
+        return !usedLetters.contains(letter);
+    }
+
+    private static boolean isRusLetter(char letter) {
+        return ((letter >= 'а' && letter <= 'я') || letter == 'ё');
     }
 
     private static int playRound(String secretWord, int errors, char[] mask, List<
             Character> usedLetters, Scanner sc) {
         while (!isGameWon(mask) && !isGameLost(errors)) {
-            System.out.printf("Количество ошибок: %d/%d%n", errors, MAX_ERRORS);
-            HangmanPicture.print(errors);
-            printUsedLetters(usedLetters);
-            System.out.println("Слово: " + new String(mask));
-            System.out.print("Введите букву: ");
-            String input = sc.next();
-            input = input.toLowerCase();
-            if (input.length() > 1) {
-                System.out.println("Неверный ввод, вводи по одной букве!");
-                continue;
-            }
-            char letter = input.charAt(0);
+            printGameState(errors, mask, usedLetters);
+            char letter = inputRusLetter(sc);
             if (!isValidLetter(letter, usedLetters)) {
                 continue;
             }
             boolean isGuessed = processGuess(letter, secretWord, mask);
-            if (isGuessed == false) {
+            if (!isGuessed) {
                 errors++;
                 System.out.println("Упс, такой буквы нет!");
             }
@@ -121,32 +115,35 @@ public final class Main {
         return errors;
     }
 
-    private static String getRandomWord(List<String> words) {
-        if (words.size() > 0) {
-            Random random = new Random();
-            int index = random.nextInt(words.size());
-            return words.get(index);
+    private static char inputRusLetter(Scanner sc) {
+        while (true) {
+            System.out.print("Введите букву: ");
+            String input = sc.next();
+            input = input.toLowerCase();
+            if (input.length() > 1) {
+                System.out.println("Неверный ввод, вводи по одной букве!");
+                continue;
+            }
+            char letter = input.charAt(0);
+            if (isRusLetter(letter)) {
+                return letter;
+            }
+            System.out.println("Введи букву русского алфавита!");
         }
-        return null;
     }
 
-    private static List<String> loadWordsFromFile() {
-        List<String> words = new ArrayList<>();
-        try {
-            File file = new File(WORDS_FILE);
-            Scanner sc = new Scanner(file);
-            while (sc.hasNextLine()) {
-                String temp = sc.nextLine();
-                temp = temp.toLowerCase();
-                words.add(temp);
-            }
-            if (words.isEmpty()) {
-                System.out.println("Словарь пуст");
-            }
-        } catch (FileNotFoundException e) {
-            System.out.println("Файл не найден");
-        }
-        return words;
+    private static void printGameState(int errors, char[] mask, List<
+            Character> usedLetters) {
+        System.out.printf("Количество ошибок: %d/%d%n", errors, MAX_ERRORS);
+        HangmanPicture.print(errors);
+        printUsedLetters(usedLetters);
+        System.out.println("Слово: " + new String(mask));
+    }
+
+    private static String getRandomWord(List<String> words) {
+        Random random = new Random();
+        int index = random.nextInt(words.size());
+        return words.get(index);
     }
 
     private static void printSecretWord(String secretWord) {
@@ -157,4 +154,3 @@ public final class Main {
         System.out.println("Использованные буквы: " + usedLetters);
     }
 }
-
