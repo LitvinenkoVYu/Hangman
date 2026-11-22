@@ -10,6 +10,9 @@ public final class Main {
     private static final int EXIT_GAME = 2;
     private static final String WORDS_FILE = "words.txt";
     private static final char HIDDEN_LETTER = '*';
+    private static char[] mask;
+    private static String secretWord;
+    // private static int errors;
 
 
     public static void main(String[] args) {
@@ -44,48 +47,56 @@ public final class Main {
             System.out.println("Не удалось загрузить словарь: файл отсутствует или пуст");
             return;
         }
-        String secretWord = getRandomWord(words);
-        char[] mask = new char[secretWord.length()];
+        secretWord = getRandomWord(words);
+        mask = new char[secretWord.length()];
         for (int i = 0; i < mask.length; i++) {
             mask[i] = HIDDEN_LETTER;
         }
         int errors = 0;
         List<Character> usedLetters = new ArrayList<>();
         System.out.println("Текущее загаданное слово: ");
-        errors = playRound(secretWord, errors, mask, usedLetters, sc);
-        if (isGameWon(mask)) {
-            HangmanPicture.print(errors);
+        errors = playRound(errors, usedLetters, sc);
+        HangmanPicture.print(errors);
+        if (isGameWon()) {
             System.out.println("Ты победил!");
-            printSecretWord(secretWord);
         } else {
-            HangmanPicture.print(errors);
             System.out.println("Ты проиграл!");
-            printSecretWord(secretWord);
         }
+        printSecretWord();
     }
 
     private static boolean isGameLost(int errors) {
         return errors >= MAX_ERRORS;
     }
 
-    private static boolean isGameWon(char[] mask) {
-        for (int i = 0; i < mask.length; i++) {
-            if (mask[i] == HIDDEN_LETTER) {
+    private static boolean isGameWon() {
+        for (char c : mask) {
+            if (c == HIDDEN_LETTER) {
                 return false;
             }
         }
         return true;
     }
 
-    private static boolean processGuess(char letter, String secretWord, char[] mask) {
-        boolean isGuessed = false;
+    private static boolean isGameOver(int errors) {
+        return isGameWon() || isGameLost(errors);
+    }
+
+    private static void processGuess(char letter) {
         for (int i = 0; i < secretWord.length(); i++) {
             if (secretWord.charAt(i) == letter) {
                 mask[i] = letter;
-                isGuessed = true;
             }
         }
-        return isGuessed;
+    }
+
+    private static boolean isLetterInWord(char letter) {
+        for (int i = 0; i < secretWord.length(); i++) {
+            if (secretWord.charAt(i) == letter) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private static boolean isValidLetter(char letter, List<Character> usedLetters) {
@@ -96,18 +107,20 @@ public final class Main {
         return ((letter >= 'а' && letter <= 'я') || letter == 'ё');
     }
 
-    private static int playRound(String secretWord, int errors, char[] mask, List<
-            Character> usedLetters, Scanner sc) {
-        while (!isGameWon(mask) && !isGameLost(errors)) {
-            printGameState(errors, mask, usedLetters);
+    private static int playRound(int errors, List<Character> usedLetters, Scanner sc) {
+        while (!isGameOver(errors)) {
+            printGameState(errors, usedLetters);
             char letter = inputRusLetter(sc);
             if (!isValidLetter(letter, usedLetters)) {
                 continue;
             }
-            boolean isGuessed = processGuess(letter, secretWord, mask);
+
+            boolean isGuessed = isLetterInWord(letter);
             if (!isGuessed) {
                 errors++;
                 System.out.println("Упс, такой буквы нет!");
+            } else {
+                processGuess(letter);
             }
             usedLetters.add(letter);
             System.out.println();
@@ -132,8 +145,7 @@ public final class Main {
         }
     }
 
-    private static void printGameState(int errors, char[] mask, List<
-            Character> usedLetters) {
+    private static void printGameState(int errors, List<Character> usedLetters) {
         System.out.printf("Количество ошибок: %d/%d%n", errors, MAX_ERRORS);
         HangmanPicture.print(errors);
         printUsedLetters(usedLetters);
@@ -146,7 +158,7 @@ public final class Main {
         return words.get(index);
     }
 
-    private static void printSecretWord(String secretWord) {
+    private static void printSecretWord() {
         System.out.println("Загаданное слово было: " + secretWord);
     }
 

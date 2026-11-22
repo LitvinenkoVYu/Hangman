@@ -68,9 +68,7 @@ public class HangmanPicture {
     };
 
     public static void print(int errors) {
-        if (errors >= 0 && errors < PICTURES.length) {
             System.out.println(PICTURES[errors]);
-        }
     }
 }
 
